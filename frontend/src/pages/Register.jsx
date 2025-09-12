@@ -24,7 +24,7 @@ const Register = () => {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
         method: "POST",
-        credentials: "include", // important for httpOnly cookie
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -36,13 +36,11 @@ const Register = () => {
         setError(data.message || "Registration failed");
         return;
       }
-
       navigate("/login");
     } catch (err) {
       setError("Something went wrong. Try again.");
     }
   };
-
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md">
@@ -64,7 +62,6 @@ const Register = () => {
               className="mt-1 w-full border px-3 py-2 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Last Name
@@ -78,7 +75,6 @@ const Register = () => {
               className="mt-1 w-full border px-3 py-2 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Email
@@ -92,7 +88,6 @@ const Register = () => {
               className="mt-1 w-full border px-3 py-2 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Password
@@ -106,12 +101,10 @@ const Register = () => {
               className="mt-1 w-full border px-3 py-2 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
-
           <button type="submit" className="btn btn-primary w-full">
             Register
           </button>
         </form>
-
         <p className="mt-4 text-sm text-gray-600">
           Already have an account?{" "}
           <a

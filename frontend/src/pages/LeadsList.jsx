@@ -5,20 +5,19 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { useNavigate } from "react-router-dom";
 
+
 export default function LeadsList() {
   const [leads, setLeads] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const nav = useNavigate();
   const gridRef = useRef();
-
   async function fetchData(p = page) {
     const res = await API.get(`/leads?page=${p}&limit=20`);
     setLeads(res.data.data);
     setPage(res.data.page);
     setTotalPages(res.data.totalPages);
   }
-
   useEffect(() => {
     fetchData(1);
   }, []);
@@ -83,13 +82,10 @@ export default function LeadsList() {
         <h1 className="text-3xl font-bold text-gray-800">Leads</h1>
         <button
           onClick={() => nav("/leads/new")}
-          className="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded shadow"
-        >
+          className="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded shadow">
           + New Lead
         </button>
       </div>
-
-      {/* Pagination Toolbar */}
       <div className="flex justify-between items-center mb-4 bg-white p-3 rounded-lg shadow">
         <span className="text-gray-700">
           Page <strong>{page}</strong> / {totalPages}
@@ -102,8 +98,7 @@ export default function LeadsList() {
               page <= 1
                 ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                 : "bg-gray-800 text-white hover:bg-gray-900"
-            }`}
-          >
+            }`}>
             Prev
           </button>
           <button
@@ -113,14 +108,11 @@ export default function LeadsList() {
               page >= totalPages
                 ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                 : "bg-gray-800 text-white hover:bg-gray-900"
-            }`}
-          >
+            }`}>
             Next
           </button>
         </div>
       </div>
-
-      {/* AG Grid */}
       <div className="ag-theme-alpine" style={{ height: 600, width: "100%" }}>
         <AgGridReact
           ref={gridRef}

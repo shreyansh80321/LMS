@@ -5,7 +5,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import LeadsList from "./pages/LeadsList";
 import LeadForm from "./pages/LeadForm";
-import Navbar from "./components/Navbar"; // ✅ Import Navbar
+import Navbar from "./components/Navbar";
 
 function PrivateRoute({ children }) {
   const [user, setUser] = useState(null);
@@ -28,7 +28,7 @@ function PrivateRoute({ children }) {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar user={user} /> {/* ✅ Show Navbar and pass user data */}
+      <Navbar user={user} /> 
       <main className="flex-1">{children}</main>
     </div>
   );

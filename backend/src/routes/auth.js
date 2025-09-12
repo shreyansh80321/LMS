@@ -3,31 +3,29 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
+
 const router = express.Router();
+
+
 
 const COOKIE_NAME = process.env.COOKIE_NAME || "lm_token";
 
-// REGISTER
+
 router.post("/register", async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password)
       return res.status(400).json({ message: "Missing fields" });
-
     const exist = await User.findOne({ email });
     if (exist) return res.status(400).json({ message: "User exists" });
-
     const hash = await bcrypt.hash(password, 10);
     const user = await User.create({ email, password: hash });
-
     return res.status(201).json({ id: user._id, email: user.email });
   } catch (err) {
     console.error("Register error:", err);
     return res.status(500).json({ message: "Server error" });
   }
 });
-
-// LOGIN
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -44,7 +42,7 @@ router.post("/login", async (req, res) => {
 
     res.cookie(COOKIE_NAME, token, {
       httpOnly: true,
-      sameSite: "strict", // better CSRF protection
+      sameSite: "strict",
       secure: process.env.NODE_ENV === "production",
       maxAge: 7 * 24 * 3600 * 1000,
     });
@@ -56,7 +54,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// LOGOUT
+
 router.post("/logout", (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
@@ -65,8 +63,6 @@ router.post("/logout", (req, res) => {
   });
   return res.status(200).json({ message: "Logged out successfully" });
 });
-
-// GET CURRENT USER
 router.get("/me", async (req, res) => {
   try {
     const token = req.cookies[COOKIE_NAME];

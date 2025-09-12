@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import API from "../api";
 import { useParams, useNavigate } from "react-router-dom";
 
+
 const empty = {
   first_name: "",
   last_name: "",
@@ -16,7 +17,6 @@ const empty = {
   lead_value: 0,
   is_qualified: false,
 };
-
 export default function LeadForm() {
   const { id } = useParams();
   const [lead, setLead] = useState(empty);
@@ -28,7 +28,6 @@ export default function LeadForm() {
         .then((r) => setLead(r.data))
         .catch(() => {});
   }, [id]);
-
   async function submit(e) {
     e.preventDefault();
     try {
@@ -39,7 +38,6 @@ export default function LeadForm() {
       alert(err?.response?.data?.message || "Save failed");
     }
   }
-
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50 p-4">
       <form
@@ -49,8 +47,6 @@ export default function LeadForm() {
         <h2 className="text-2xl font-bold text-gray-800">
           {id ? "Edit Lead" : "Create New Lead"}
         </h2>
-
-        {/* Grid layout for inputs */}
         <div className="grid md:grid-cols-2 gap-4">
           <div>
             <label className="block text-gray-700 text-sm font-medium mb-1">
@@ -63,7 +59,6 @@ export default function LeadForm() {
               onChange={(e) => setLead({ ...lead, first_name: e.target.value })}
             />
           </div>
-
           <div>
             <label className="block text-gray-700 text-sm font-medium mb-1">
               Last Name
@@ -75,7 +70,6 @@ export default function LeadForm() {
               onChange={(e) => setLead({ ...lead, last_name: e.target.value })}
             />
           </div>
-
           <div className="md:col-span-2">
             <label className="block text-gray-700 text-sm font-medium mb-1">
               Email
@@ -88,7 +82,6 @@ export default function LeadForm() {
               onChange={(e) => setLead({ ...lead, email: e.target.value })}
             />
           </div>
-
           <div>
             <label className="block text-gray-700 text-sm font-medium mb-1">
               Phone
@@ -100,7 +93,6 @@ export default function LeadForm() {
               onChange={(e) => setLead({ ...lead, phone: e.target.value })}
             />
           </div>
-
           <div>
             <label className="block text-gray-700 text-sm font-medium mb-1">
               Company
@@ -112,7 +104,6 @@ export default function LeadForm() {
               onChange={(e) => setLead({ ...lead, company: e.target.value })}
             />
           </div>
-
           <div>
             <label className="block text-gray-700 text-sm font-medium mb-1">
               City
@@ -124,7 +115,6 @@ export default function LeadForm() {
               onChange={(e) => setLead({ ...lead, city: e.target.value })}
             />
           </div>
-
           <div>
             <label className="block text-gray-700 text-sm font-medium mb-1">
               State
@@ -136,7 +126,6 @@ export default function LeadForm() {
               onChange={(e) => setLead({ ...lead, state: e.target.value })}
             />
           </div>
-
           <div>
             <label className="block text-gray-700 text-sm font-medium mb-1">
               Source
@@ -144,8 +133,7 @@ export default function LeadForm() {
             <select
               className="w-full border rounded-lg px-3 py-2 bg-white focus:ring focus:ring-blue-300 outline-none"
               value={lead.source}
-              onChange={(e) => setLead({ ...lead, source: e.target.value })}
-            >
+              onChange={(e) => setLead({ ...lead, source: e.target.value })}>
               <option value="website">Website</option>
               <option value="facebook_ads">Facebook Ads</option>
               <option value="google_ads">Google Ads</option>
@@ -154,7 +142,6 @@ export default function LeadForm() {
               <option value="other">Other</option>
             </select>
           </div>
-
           <div>
             <label className="block text-gray-700 text-sm font-medium mb-1">
               Status
@@ -171,7 +158,6 @@ export default function LeadForm() {
               <option value="won">Won</option>
             </select>
           </div>
-
           <div>
             <label className="block text-gray-700 text-sm font-medium mb-1">
               Score
@@ -185,7 +171,6 @@ export default function LeadForm() {
               }
             />
           </div>
-
           <div>
             <label className="block text-gray-700 text-sm font-medium mb-1">
               Lead Value
@@ -200,8 +185,6 @@ export default function LeadForm() {
             />
           </div>
         </div>
-
-        {/* Checkbox */}
         <div className="flex items-center space-x-2">
           <input
             type="checkbox"
