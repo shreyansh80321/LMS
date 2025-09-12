@@ -40,12 +40,14 @@ router.post("/login", async (req, res) => {
       expiresIn: "7d",
     });
 
-    res.cookie(COOKIE_NAME, token, {
-      httpOnly: true,
-      sameSite: "strict",
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 7 * 24 * 3600 * 1000,
-    });
+  res.cookie(COOKIE_NAME, token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production", // true on Vercel (HTTPS)
+    sameSite: "None", // allow cross-site requests from frontend on different domain
+    maxAge: 7 * 24 * 3600 * 1000,
+  });
+
+
 
     return res.status(200).json({ id: user._id, email: user.email });
   } catch (err) {
@@ -56,11 +58,11 @@ router.post("/login", async (req, res) => {
 
 
 router.post("/logout", (req, res) => {
-  res.clearCookie("token", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-  });
+ res.clearCookie(COOKIE_NAME, {
+   httpOnly: true,
+   secure: process.env.NODE_ENV === "production",
+   sameSite: "None",
+ });
   return res.status(200).json({ message: "Logged out successfully" });
 });
 router.get("/me", async (req, res) => {
