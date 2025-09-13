@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import API from "../api";
 import { useParams, useNavigate } from "react-router-dom";
 
-
 const empty = {
   first_name: "",
   last_name: "",
@@ -17,17 +16,20 @@ const empty = {
   lead_value: 0,
   is_qualified: false,
 };
+
 export default function LeadForm() {
   const { id } = useParams();
   const [lead, setLead] = useState(empty);
   const nav = useNavigate();
 
   useEffect(() => {
-    if (id)
+    if (id) {
       API.get(`/leads/${id}`)
         .then((r) => setLead(r.data))
         .catch(() => {});
+    }
   }, [id]);
+
   async function submit(e) {
     e.preventDefault();
     try {
@@ -38,102 +40,65 @@ export default function LeadForm() {
       alert(err?.response?.data?.message || "Save failed");
     }
   }
+
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-purple-50 via-indigo-50 to-blue-50 p-6 relative overflow-hidden">
+      {/* Decorative background shapes */}
+      <div className="absolute -top-32 -left-32 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+      <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+
       <form
         onSubmit={submit}
-        className="bg-white shadow-xl rounded-2xl p-8 max-w-2xl w-full space-y-6"
+        className="relative z-10 w-full max-w-3xl bg-white backdrop-blur-sm bg-opacity-80 border border-gray-200 shadow-2xl rounded-3xl p-10 space-y-6"
       >
-        <h2 className="text-2xl font-bold text-gray-800">
+        <h2 className="text-3xl font-extrabold text-gray-800 text-center">
           {id ? "Edit Lead" : "Create New Lead"}
         </h2>
-        <div className="grid md:grid-cols-2 gap-4">
+
+        <div className="grid md:grid-cols-2 gap-5">
+          {[
+            { label: "First Name", key: "first_name", placeholder: "John" },
+            { label: "Last Name", key: "last_name", placeholder: "Doe" },
+            {
+              label: "Email",
+              key: "email",
+              placeholder: "john@example.com",
+              type: "email",
+              colSpan: 2,
+            },
+            { label: "Phone", key: "phone", placeholder: "+1 234 567 890" },
+            { label: "Company", key: "company", placeholder: "Company Inc." },
+            { label: "City", key: "city", placeholder: "New York" },
+            { label: "State", key: "state", placeholder: "NY" },
+          ].map((field) => (
+            <div
+              key={field.key}
+              className={field.colSpan === 2 ? "md:col-span-2" : ""}
+            >
+              <label className="block text-gray-700 font-medium mb-1">
+                {field.label}
+              </label>
+              <input
+                type={field.type || "text"}
+                placeholder={field.placeholder}
+                value={lead[field.key]}
+                onChange={(e) =>
+                  setLead({ ...lead, [field.key]: e.target.value })
+                }
+                className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring focus:ring-indigo-400 focus:border-indigo-400 outline-none transition shadow-sm"
+              />
+            </div>
+          ))}
+
           <div>
-            <label className="block text-gray-700 text-sm font-medium mb-1">
-              First Name
-            </label>
-            <input
-              className="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-300 outline-none"
-              placeholder="John"
-              value={lead.first_name}
-              onChange={(e) => setLead({ ...lead, first_name: e.target.value })}
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700 text-sm font-medium mb-1">
-              Last Name
-            </label>
-            <input
-              className="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-300 outline-none"
-              placeholder="Doe"
-              value={lead.last_name}
-              onChange={(e) => setLead({ ...lead, last_name: e.target.value })}
-            />
-          </div>
-          <div className="md:col-span-2">
-            <label className="block text-gray-700 text-sm font-medium mb-1">
-              Email
-            </label>
-            <input
-              className="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-300 outline-none"
-              placeholder="john@example.com"
-              type="email"
-              value={lead.email}
-              onChange={(e) => setLead({ ...lead, email: e.target.value })}
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700 text-sm font-medium mb-1">
-              Phone
-            </label>
-            <input
-              className="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-300 outline-none"
-              placeholder="+1 234 567 890"
-              value={lead.phone}
-              onChange={(e) => setLead({ ...lead, phone: e.target.value })}
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700 text-sm font-medium mb-1">
-              Company
-            </label>
-            <input
-              className="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-300 outline-none"
-              placeholder="Company Inc."
-              value={lead.company}
-              onChange={(e) => setLead({ ...lead, company: e.target.value })}
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700 text-sm font-medium mb-1">
-              City
-            </label>
-            <input
-              className="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-300 outline-none"
-              placeholder="New York"
-              value={lead.city}
-              onChange={(e) => setLead({ ...lead, city: e.target.value })}
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700 text-sm font-medium mb-1">
-              State
-            </label>
-            <input
-              className="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-300 outline-none"
-              placeholder="NY"
-              value={lead.state}
-              onChange={(e) => setLead({ ...lead, state: e.target.value })}
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700 text-sm font-medium mb-1">
+            <label className="block text-gray-700 font-medium mb-1">
               Source
             </label>
             <select
-              className="w-full border rounded-lg px-3 py-2 bg-white focus:ring focus:ring-blue-300 outline-none"
               value={lead.source}
-              onChange={(e) => setLead({ ...lead, source: e.target.value })}>
+              onChange={(e) => setLead({ ...lead, source: e.target.value })}
+              className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring focus:ring-indigo-400 focus:border-indigo-400 outline-none transition shadow-sm bg-white"
+            >
               <option value="website">Website</option>
               <option value="facebook_ads">Facebook Ads</option>
               <option value="google_ads">Google Ads</option>
@@ -142,14 +107,15 @@ export default function LeadForm() {
               <option value="other">Other</option>
             </select>
           </div>
+
           <div>
-            <label className="block text-gray-700 text-sm font-medium mb-1">
+            <label className="block text-gray-700 font-medium mb-1">
               Status
             </label>
             <select
-              className="w-full border rounded-lg px-3 py-2 bg-white focus:ring focus:ring-blue-300 outline-none"
               value={lead.status}
               onChange={(e) => setLead({ ...lead, status: e.target.value })}
+              className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring focus:ring-indigo-400 focus:border-indigo-400 outline-none transition shadow-sm bg-white"
             >
               <option value="new">New</option>
               <option value="contacted">Contacted</option>
@@ -158,60 +124,63 @@ export default function LeadForm() {
               <option value="won">Won</option>
             </select>
           </div>
+
           <div>
-            <label className="block text-gray-700 text-sm font-medium mb-1">
+            <label className="block text-gray-700 font-medium mb-1">
               Score
             </label>
             <input
               type="number"
-              className="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-300 outline-none"
               value={lead.score}
               onChange={(e) =>
                 setLead({ ...lead, score: Number(e.target.value) })
               }
+              className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring focus:ring-indigo-400 focus:border-indigo-400 outline-none transition shadow-sm"
             />
           </div>
+
           <div>
-            <label className="block text-gray-700 text-sm font-medium mb-1">
+            <label className="block text-gray-700 font-medium mb-1">
               Lead Value
             </label>
             <input
               type="number"
-              className="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-300 outline-none"
               value={lead.lead_value}
               onChange={(e) =>
                 setLead({ ...lead, lead_value: Number(e.target.value) })
               }
+              className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring focus:ring-indigo-400 focus:border-indigo-400 outline-none transition shadow-sm"
             />
           </div>
         </div>
-        <div className="flex items-center space-x-2">
+
+        <div className="flex items-center space-x-3 mt-4">
           <input
             type="checkbox"
             id="qualified"
-            className="h-4 w-4 text-blue-600"
             checked={lead.is_qualified}
             onChange={(e) =>
               setLead({ ...lead, is_qualified: e.target.checked })
             }
+            className="h-5 w-5 text-blue-600 rounded transition"
           />
-          <label htmlFor="qualified" className="text-gray-700">
+          <label htmlFor="qualified" className="text-gray-700 font-medium">
             Mark as Qualified
           </label>
         </div>
 
         {/* Actions */}
-        <div className="flex justify-end gap-3 pt-4">
+        <div className="flex justify-end gap-4 pt-5">
           <button
             type="button"
             onClick={() => nav("/leads")}
-            className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100"
+            className="px-6 py-3 rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow"
+            className="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-semibold hover:scale-[1.03] shadow-lg transition transform"
           >
             Save
           </button>
